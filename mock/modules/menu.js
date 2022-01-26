@@ -42,7 +42,7 @@ const getMenuList = {
                         routeName: "AdminUser",
                         name: "用户管理",
                         icon: "user",
-                        filePath: 'views/admin/user.vue',
+                        filePath: 'views/admin/operator.vue',
                         hidden: 0,
                         alive: 0,
                         status: 1,

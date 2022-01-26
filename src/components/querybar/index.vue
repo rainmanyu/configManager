@@ -12,10 +12,7 @@
     </pi-querybar-item>
     <slot></slot>
     <pi-querybar-item v-permission="permission_tag">
-      <pi-button theme @click="handleSearch" icon="search_light">
-        查询</pi-button
-      >
-      <pi-button @click="handleReset" icon="el-icon-refresh"> 重置</pi-button>
+      <pi-button theme @click="handleSearch" icon="search_light">Query</pi-button>
     </pi-querybar-item>
   </div>
 </template>
@@ -54,6 +51,7 @@ export default {
   methods: {
     handleSearch() {
       this.$emit("search");
+
     },
     handleReset() {
       this.$emit("reset");

@@ -2,15 +2,7 @@
   <div class="navbar">
     <div class="main">
       <img class="icon" src="@/assets/images/layout/gzt.png" />
-      <h3 class="text">工作台</h3>
-      <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item
-          v-for="(item, index) in cur_routes"
-          :key="item.title"
-          :to="index < cur_routes.length - 1 ? { path: item.path } : ''"
-          >{{ item.title }}</el-breadcrumb-item
-        >
-      </el-breadcrumb>
+      <h3 class="text">Site Management</h3>
     </div>
     <div class="right">
       <el-dropdown @command="handleCommand">
@@ -36,10 +28,7 @@ export default {
     return {
       dropdownMenu: [
         {
-          title: "个人中心",
-        },
-        {
-          title: "退出登录",
+          title: "exit",
         },
       ],
     };
@@ -51,10 +40,10 @@ export default {
   methods: {
     
     handleCommand(item) {
-      if (item.title == "退出登录") {
-        //退出 登录
+      if (item.title == "exit") {
+        //exit
         this.outLogin();
-      } else if (item.title == "个人中心") {
+      } else if (item.title == "personnel") {
         //
         this.$router.push('/person/center')
       }
@@ -97,16 +86,6 @@ export default {
       align-items: center;
       margin-left: 20px;
       height: 100%;
-      &::after {
-        display: inline-block;
-        content: "";
-        height: 30px;
-        width: 2px;
-        border-radius: 1px;
-        background: #41a5e0;
-        margin-left: 20px;
-        margin-right: 30px;
-      }
     }
     ::v-deep .el-breadcrumb {
       font-size: 16px;

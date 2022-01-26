@@ -161,7 +161,7 @@ import {
   editUser,
 } from "@api/admin/user.js";
 import mixins from "@/mixins/page.js";
-import avatarUpload from "@/components/avatarUpload";
+import avatarUpload from "@components/avatarUpload";
 //表格接口参数
 const tableQuery = {
   page: 1,

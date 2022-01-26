@@ -24,13 +24,13 @@
         />
       </div>
       <div class="bullshit">
-        <div class="bullshit__oops">出错了！</div>
+        <div class="bullshit__oops">404 Error</div>
         <!-- <div class="bullshit__info">All rights reserved
           <a style="color:#20a0ff" href="https://wallstreetcn.com" target="_blank">wallstreetcn</a>
         </div> -->
         <div class="bullshit__headline">{{ message }}</div>
         <div class="bullshit__info">
-          请检查您输入的网址是否正确，或单击下面的按钮返回首页
+          Please input the correct address.
         </div>
         <div class="bullshit__return-home" @click="toHomepg">返回首页</div>
       </div>
@@ -45,7 +45,7 @@ export default {
   computed: {
     ...mapGetters(["login_type"]),
     message() {
-      return "站长说你进不去这个页面...";
+      return "404...";
     },
   },
 

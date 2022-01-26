@@ -1,14 +1,6 @@
 <template>
   <div class="container">
     <div class="main flex-row">
-      <section class="title-box">
-        <h3 class="title">...&nbsp;&nbsp;&nbsp;Hello!&nbsp;&nbsp;&nbsp;...</h3>
-        <h4 class="subtitle">欢迎来到Pixle Vue Admin!</h4>
-        <div class="english">
-          <span>A simple and portable background management system </span>
-          <span>vue framework</span>
-        </div>
-      </section>
       <section class="login-window">
         <h2 class="txt">Login</h2>
         <div v-if="loginType == 'account'" class="input-row">
@@ -16,19 +8,7 @@
           <input
             class="input"
             v-model="account"
-            placeholder="请输入用户名"
-            :readonly="readonlyInput"
-            @focus="cancelReadOnly()"
-          />
-        </div>
-        <div v-else class="input-row">
-          <img class="icon" src="@assets/images/login/user.png" />
-          <input
-            class="input"
-            v-input.num
-            v-model="mobile"
-            placeholder="请输入手机号"
-            maxlength="11"
+            placeholder="Please input username"
             :readonly="readonlyInput"
             @focus="cancelReadOnly()"
           />
@@ -38,61 +18,13 @@
           <input
             class="input"
             v-model="password"
-            placeholder="请输入密码"
+            placeholder="Please input password"
             type="password"
             :readonly="readonlyInput"
             @focus="cancelReadOnly()"
           />
         </div>
-        <div class="verif-view">
-          <div class="input-panel">
-            <img class="icon" src="@assets/images/login/code.png" />
-            <input
-              v-if="loginType == 'account'"
-              v-model="inputRamCode"
-              class="input"
-                v-input.num
-              placeholder="请输入验证码"
-            />
-            <input
-              v-else
-              class="input"
-              v-input.num_alp
-              v-model="inputMsgCode"
-              placeholder="请输入验证码"
-            />
-          </div>
-          <div
-            v-if="loginType == 'account'"
-            class="code-panel"
-            @click="getRamdonCode"
-          >
-            <verficode-view :identifyCode="ramdoCode"></verficode-view>
-          </div>
-          <div v-else class="code-panel get-code-btn" @click="handlePhoneCode">
-            {{ getCodeTxt || "获取验证码" }}
-          </div>
-        </div>
-        <div class="opt-bar flex-row">
-          <div
-            v-if="loginType == 'account'"
-            class="panel"
-            @click="isRembPsd = !isRembPsd"
-          >
-            <img class="icon" :src="setRemPsdIcon" />
-            <span class="_txt">记住密码</span>
-          </div>
-          <div
-            class="panel"
-            @click="loginType = loginType == 'account' ? 'phone' : 'account'"
-          >
-            <img class="icon icon2" :src="setLoginTypeIcon" />
-            <span class="_txt">
-              {{ loginType == "account" ? "手机登录" : "密码登录" }}</span
-            >
-          </div>
-        </div>
-        <div class="login-btn" @click="handleLogin">登录</div>
+        <div class="login-btn" @click="handleLogin">Login</div>
       </section>
     </div>
   </div>
@@ -111,15 +43,10 @@ export default {
       mobile: "",
       password: "",
       interval: null,
-      inputRamCode: "", //用户输入的随机验证码
-      inputMsgCode: "", //用户输入的短信验证码
       readonlyInput: true,
     };
   },
   created() {
-    this.getRamdonCode();
-    //从本地还原账号密码
-
     let isRembPsd = localStorage.getItem("isRembPsd") || false;
     this.isRembPsd = isRembPsd === "true" ? true : false;
     this.account = this.isRembPsd ? localStorage.getItem("account") : "";
@@ -127,7 +54,7 @@ export default {
   },
   computed: {
     setRemPsdIcon() {
-      //设置记住密码勾选图标
+      //Remember password
       return this.isRembPsd
         ? require("@assets/images/login/checked_active.png")
         : require("@assets/images/login/checked_normal.png");
@@ -139,42 +66,11 @@ export default {
     },
   },
   methods: {
-    //生成随机码
-    getRamdonCode() {
-      let code = "";
-      for (let i = 0; i < 4; i++) {
-        code += Math.floor(Math.random() * 10);
-      }
-      this.ramdoCode = code;
-    },
-    //获取手机验证码
-    handlePhoneCode() {
-      if (this.interval == null) {
-        let i = 60;
-        this.getCodeTxt = `${i}秒后重获`;
-        this.interval = setInterval(
-          () => {
-            if (i > 1) {
-              i--;
-              this.getCodeTxt = `${i}秒后重获`;
-            } else {
-              clearInterval(this.interval);
-              this.interval = null;
-              this.getCodeTxt = "重新获取";
-            }
-          },
-          1000,
-          true
-        );
-      }
-    },
-    //登录
     async handleLogin() {
-      if (!this.checkParamsLegal()) return; //检查参数是否合法
+      if (!this.checkParamsLegal()) return;
 
       let params = {}; //登录接口参数
       if (this.loginType == "account") {
-        //账号密码的呢轮毂
         params = {
           type: 1,
           account: this.account,
@@ -187,15 +83,14 @@ export default {
           params: params,
         });
         if (this.loginType == "account") {
-          localStorage.setItem("isRembPsd", this.isRembPsd);
           localStorage.setItem("account", this.isRembPsd ? this.account : "");
           localStorage.setItem("password", this.isRembPsd ? this.password : "");
         }
 
           this.$router.replace("/home/index");
           this.$notify({
-            title:'登录成功',
-            message:'欢迎回来！',
+            title:'Login successfully',
+            message:'Welcome back!',
             type:'success',
             duration:3000
           })
@@ -207,15 +102,13 @@ export default {
     checkParamsLegal() {
       if (this.loginType == "account") {
         if (!this.account) {
-          this.showMsg("请输入账号");
+          this.showMsg("Please input the username!");
           return false;
         } else if (!this.password) {
-          this.showMsg("请输入密码");
-          return false;
-        } else if (this.inputRamCode != this.ramdoCode) {
-          this.showMsg("验证码错误");
+          this.showMsg("Please input the password!");
           return false;
         }
+
         return true;
       }
     },

@@ -52,7 +52,7 @@ const getAllRouter = {
                         title: "用户管理",
                         icon: "user"
                     },
-                    component: 'views/admin/user.vue',
+                    component: 'views/admin/operator.vue',
                 }
                     , {
                     id: 6,
@@ -131,7 +131,7 @@ const getAsyncRouter = {
                         title: "用户管理",
                         icon: "user"
                     },
-                    component: 'views/admin/user.vue',
+                    component: 'views/admin/operator.vue',
                 }
                     , {
                     id: 6,

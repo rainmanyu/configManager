@@ -89,7 +89,7 @@ export const defaultRoutes = [{
   //       title: "用户管理",
   //       icon: "user"
   //     },
-  //     component: () => import("../views/admin/user.vue"),
+  //     component: () => import("../views/admin/operator.vue"),
   //   }
   //   ,{
   //     path: "role",

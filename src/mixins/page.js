@@ -5,7 +5,8 @@ export default {
             total: 0,
             tableLoading: false,
             dialogVisible: false, //编辑或添加弹窗标识
-            tableList: [], //表格数据
+            originalTableList: [],
+            tableList: [],
             openDialogType: "", //弹窗类型add:'添加'，edit:'编辑'，detail:'详情'
             selectionIds: [], //选中项id数组
         }
@@ -30,10 +31,6 @@ export default {
     },
     methods: {
         init() {
-
-        },
-        //从接口获取表格数据
-        getTableList() {
 
         },
         //查询
@@ -67,6 +64,10 @@ export default {
             this.openDialogType = 'add';
             this.dialogVisible = true;
         },
+
+        handleQuery() {
+            this.getTableListByQuery(this.formQuery.operatorName, this.formQuery.domainId);
+        },
         //新增前回调
         addBeforeCallback() {
 
@@ -76,6 +77,12 @@ export default {
         handleEdit(row) {
             this.editBeforeCallback(row);
             this.openDialogType = "edit";
+            this.dialogVisible = true;
+        },
+
+        handleDetail(row) {
+            this.editBeforeCallback(row);
+            this.openDialogType = "detail";
             this.dialogVisible = true;
         },
         //编辑前回调

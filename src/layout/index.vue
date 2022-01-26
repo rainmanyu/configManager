@@ -1,11 +1,9 @@
 <template>
   <div class="container">
-    <!-- 左侧菜单栏 -->
-    <sideMenu> </sideMenu>
     <div class="main">
-      <!-- 导航栏 -->
+
       <narBar class="navBar"> </narBar>
-      <!-- 内容 -->
+
       <pageMain class="pageMain"> </pageMain>
       <!-- 侧滑栏 -->
       <!-- <drawer :show.sync="showDrawer"></drawer>

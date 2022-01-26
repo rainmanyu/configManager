@@ -9,6 +9,14 @@ export function getList(data){
     })
 }
 
+export function getOperatorList(data){
+    return request({
+        url:"/operatorList",
+        method:"post",
+        data
+    })
+}
+
 
 export function getRoles(data){
     return request({

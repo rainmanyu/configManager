@@ -7,8 +7,8 @@ const getRoleList = {
             code: 1,
             data:{
                 list: [{
-                    name:'超级管理员',
-                    desc:'拥有所有权限',
+                    name:'super',
+                    desc:'Has all the access',
                     tag:'adminer',
                     update_time:'2021-12-12 09:15:00',
                     status:1,
@@ -16,9 +16,9 @@ const getRoleList = {
                     route_id:'3,4,5,8,9,10,6,11,12,13,7,14,20'
                 },
                 {
-                    name:'普通用户',
+                    name:'user',
                     tag:'ordinuser',
-                    desc:'拥有查看权限',
+                    desc:'view',
                     update_time:'2021-12-12 13:20:00',
                     status:1,
                     id:2,
