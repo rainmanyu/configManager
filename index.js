@@ -6,6 +6,6 @@ const app = express()
 
 app.use('/', express.static('dist'));
 
-app.listen(9888, () => {
-  console.log(`App listening at port 9888`)
+app.listen(8889, () => {
+  console.log(`App listening at port 8889`)
 });

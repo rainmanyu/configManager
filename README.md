@@ -35,10 +35,11 @@ ip:9888
 10.3.240.11(ts-manager rainman)
 /rainman
 git clone -b main https://github.com/rainmanyu/configManager.git
+git pull
 enter /rainman/configManager
-1. install nodejs
 yum install nodejs -y
 npm install
 npm run build
 -- build for production
+nohup node index.js &
 
