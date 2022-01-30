@@ -18,4 +18,16 @@ npm run serve
 npm run build
 ```
 
-鸣谢vue、elementui、vue-element-admin、axios、mock、tinymce
+
+
+### Deploy
+```
+1. compile for production
+npm run build
+2. node index.js
+the deploy directory is dist
+nohup node index.js &
+
+URL:
+ip:9888
+```

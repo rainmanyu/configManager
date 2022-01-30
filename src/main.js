@@ -34,6 +34,7 @@ Vue.prototype.$utils= utils;
 Vue.prototype.$axios=axios;
 Vue.prototype.$bus=new Vue();
 
+
 new Vue({
   router,
   store,

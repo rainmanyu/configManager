@@ -14,9 +14,9 @@ export default {
     computed: {
         getDialogTitle() {
             let obj = {
-                add: "新增",
-                edit: "编辑",
-                detail: "详情",
+                add: "New",
+                edit: "Edit",
+                detail: "Detail",
             };
             if (this.openDialogType in obj) {
                 return obj[this.openDialogType];
@@ -85,8 +85,6 @@ export default {
             this.openDialogType = "detail";
             this.dialogVisible = true;
         },
-        //编辑前回调
-        // eslint-disable-next-line no-unused-vars
         editBeforeCallback(row) {
 
         },
