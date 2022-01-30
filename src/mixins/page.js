@@ -86,7 +86,7 @@ export default {
             this.dialogVisible = true;
         },
         editBeforeCallback(row) {
-
+            print(row)
         },
 
         //删除前显示模态框
