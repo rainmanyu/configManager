@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <div class="prop-name">router/index.js</div>
+    <div class="prop-name">router/config_index.js</div>
     <div class="richtext" v-html="richtext"></div>
     <!-- 表格 -->
     <el-table

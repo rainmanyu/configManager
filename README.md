@@ -24,9 +24,9 @@ npm run build
 ```
 1. compile for production
 npm run build
-2. node index.js
+2. node config_index.js
 the deploy directory is dist
-nohup node index.js &
+nohup node config_index.js &
 
 URL:
 ip:9888
@@ -41,5 +41,5 @@ yum install nodejs -y
 npm install
 npm run build
 -- build for production
-nohup node index.js &
+nohup node config_index.js &
 
