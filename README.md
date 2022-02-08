@@ -29,8 +29,15 @@ the deploy directory is dist
 nohup node config_index.js &
 
 URL:
-ip:9888
+ip:8889
 ```
+
+//configuration
+conf/config.js
+
+server sites
+http://10.2.47.17:9888
+
 
 10.3.240.11(ts-manager rainman)
 /rainman
@@ -41,5 +48,12 @@ yum install nodejs -y
 npm install
 npm run build
 -- build for production
-nohup node config_index.js &
+
+[//]: # (nohup node config_index.js &)
+rm -rf /ts-manager/norway_sites
+cp -R dist /ts-manager/norway_sites
+enter /ts-manager
+nohup node index.js &
+
+
 
