@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import App from './App.vue';
-import router from './router';
 import store from './store';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
@@ -15,8 +14,6 @@ import piQuerybarItem from './components/querybarItem/install';
 import permission from './directive/permission/install';
 import inputDirective from './directive/input/install';
 import './style/index.css';
-import './router/watch';
-import '../mock';
 
 
 Vue.config.productionTip = false
@@ -36,7 +33,6 @@ Vue.prototype.$bus=new Vue();
 
 
 new Vue({
-  router,
   store,
   render: h => h(App)
 }).$mount('#app')

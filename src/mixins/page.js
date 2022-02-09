@@ -14,7 +14,7 @@ export default {
     computed: {
         getDialogTitle() {
             let obj = {
-                add: "New",
+                duplicate: "Duplicate",
                 edit: "Edit",
                 detail: "Detail",
             };
@@ -45,14 +45,11 @@ export default {
         searchBeforeCallback() {
 
         },
-        //重置
         handleReset() {
-            this.resetBeforeCallback();
-            if (this.$refs['table']) {
-                this.$refs['table'].clearSort()
-            }
-            this.tableQuery = this.$options.data().tableQuery
-            this.getTableList();
+            this.formQuery.operatorName = ''
+            this.formQuery.domainId = ''
+            this.formQuery.ENV = ''
+            this.getTableListByQuery(this.formQuery.operatorName, this.formQuery.domainId, this.formQuery.ENV);
         },
         //重置前回调
         resetBeforeCallback() {
@@ -66,17 +63,21 @@ export default {
         },
 
         handleQuery() {
-            this.getTableListByQuery(this.formQuery.operatorName, this.formQuery.domainId);
+            this.getTableListByQuery(this.formQuery.operatorName, this.formQuery.domainId, this.formQuery.ENV);
         },
-        //新增前回调
         addBeforeCallback() {
 
         },
 
-        //编辑
         handleEdit(row) {
             this.editBeforeCallback(row);
             this.openDialogType = "edit";
+            this.dialogVisible = true;
+        },
+
+        handleDuplicate(row) {
+            this.editBeforeCallback(row);
+            this.openDialogType = "duplicate";
             this.dialogVisible = true;
         },
 
@@ -126,6 +127,7 @@ export default {
         },
         //关闭（新增或编辑）弹窗，恢复表单数据去除表单校验
         onCloseDialog() {
+            this.dialogVisible = false;
             this.closeDialogBeforeCallback();
             this.formQuery = this.$options.data().formQuery;
             this.$nextTick(()=>{

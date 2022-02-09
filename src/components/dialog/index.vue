@@ -38,11 +38,11 @@ export default {
     },
     showConfirm: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     showCancle: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     confirmText: {
       type: String,
