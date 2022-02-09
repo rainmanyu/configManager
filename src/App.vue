@@ -49,7 +49,6 @@
       <el-table-column label="Operator" align="center" prop="operatorName" sortable width="200" />
       <el-table-column label="domainId" align="center" prop="domainId" width="80"/>
       <el-table-column label="ENV" align="center" prop="environment" width="120" />
-      <el-table-column label="gmENV" align="center" prop="gmENV" width="80" />
       <el-table-column label="status" align="center" prop="status" />
       <el-table-column label="playerAPI" align="center" prop="playerAPI" />
       <el-table-column label="tag" align="center" prop="player_version_tag" />
@@ -63,12 +62,12 @@
           <el-row>
             <el-col :span=9><div style="word-spacing:10px">{{"\xa0\xa0"}}</div></el-col>
             <el-col :span=6>
-              <el-col :span=12>
+              <el-col :span=24>
                 <img class="opt-icon" src="@/assets/images/common/edit_icon.png" @click="handleEdit(row)" />
               </el-col>
-              <el-col :span=12>
-                <img class="opt-icon" src="@/assets/images/common/add_icon.png" @click="handleDuplicate(row)" />
-              </el-col>
+<!--              <el-col :span=12>-->
+<!--                <img class="opt-icon" src="@/assets/images/common/add_icon.png" @click="handleDuplicate(row)" />-->
+<!--              </el-col>-->
             </el-col>
             <el-col :span=9></el-col>
           </el-row>
@@ -321,13 +320,7 @@ export default {
     },
 
     editBeforeCallback(row) {
-      let { operatorGroup, operatorName, domainId, gmENV, partnerID, partnerKey,
-        environment, region, status, playerAPI, casinoAPI, liveLobby, GIC, Notification, BalanceUpdate } = row;
-      this.formQuery = { operatorGroup, operatorName, domainId, gmENV, partnerID, partnerKey,
-        environment, region, status, playerAPI, casinoAPI, liveLobby, GIC, Notification, BalanceUpdate };
-
       this.row = row;
-      console.log(row)
     },
 
     onDialogConfirm() {
