@@ -72,12 +72,12 @@
           <el-row>
             <el-col :span=9><div style="word-spacing:10px">{{"\xa0\xa0"}}</div></el-col>
             <el-col :span=6>
-              <el-col :span=24>
+              <el-col :span=12>
                 <img class="opt-icon" src="@/assets/images/common/edit_icon.png" @click="handleEdit(row)" />
               </el-col>
-<!--              <el-col :span=12>-->
-<!--                <img class="opt-icon" src="@/assets/images/common/add_icon.png" @click="handleDuplicate(row)" />-->
-<!--              </el-col>-->
+              <el-col :span=12>
+                <img class="opt-icon" src="@/assets/images/common/add_icon.png" @click="handleDuplicate(row)" />
+              </el-col>
             </el-col>
             <el-col :span=9></el-col>
           </el-row>
@@ -94,8 +94,11 @@
             </el-form-item>
           </el-col>
           <el-col :span=8>
-            <el-form-item label="domainId">
-              <el-input v-model="row.domainId" placeholder="" />
+<!--            :dit-inpclass="{ 'eut':(openDialogType=='edit'), 'no-edit-input':(openDialogType!='edit')}"-->
+            <el-form-item label="domainId" >
+              <el-input v-model="row.domainId" placeholder="" v-bind:readonly="openDialogType=='edit'"
+                        :class="{ 'edit-input':(openDialogType=='edit'), 'no-edit-input':(openDialogType!='edit')}"
+              />
             </el-form-item>
           </el-col>
           <el-col :span=8>
@@ -149,12 +152,16 @@
           </el-col>
           <el-col :span=6>
             <el-form-item label="version tag">
-              <el-input v-model="row.player_version_tag" placeholder="" />
+              <el-input v-model="row.player_version_tag" placeholder="" v-bind:readonly="openDialogType=='edit'"
+                        :class="{ 'edit-input':(openDialogType=='edit'), 'no-edit-input':(openDialogType!='edit')}"
+              />
             </el-form-item>
           </el-col>
           <el-col :span=6>
             <el-form-item label="deploy time">
-              <el-input v-model="row.player_version_deploy_time" placeholder="" />
+              <el-input v-model="row.player_version_deploy_time" placeholder="" v-bind:readonly="openDialogType=='edit'"
+                        :class="{ 'edit-input':(openDialogType=='edit'), 'no-edit-input':(openDialogType!='edit')}"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -167,12 +174,16 @@
           </el-col>
           <el-col :span=6>
             <el-form-item label="version tag">
-              <el-input v-model="row.casino_version_tag" placeholder="" />
+              <el-input v-model="row.casino_version_tag" placeholder="" v-bind:readonly="openDialogType=='edit'"
+                        :class="{ 'edit-input':(openDialogType=='edit'), 'no-edit-input':(openDialogType!='edit')}"
+              />
             </el-form-item>
           </el-col>
           <el-col :span=6>
             <el-form-item label="deploy time">
-              <el-input v-model="row.casino_version_deploy_time" placeholder="" />
+              <el-input v-model="row.casino_version_deploy_time" placeholder="" v-bind:readonly="openDialogType=='edit'"
+                        :class="{ 'edit-input':(openDialogType=='edit'), 'no-edit-input':(openDialogType!='edit')}"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -428,4 +439,20 @@ export default {
     padding: 0 15px;
     transform: translateX(-50%) translateY(-50%);
   }
+
+
+
+</style>
+<style scoped>
+.edit-input>>>.el-input__inner{
+  font-size: 18px!important;
+  color:#000000!important;
+  background-color:#FF8844;
+  font-family: cursive!important;
+}
+
+
+.no-edit-input>>>.el-input__inner{
+
+}
 </style>

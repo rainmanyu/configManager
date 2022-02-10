@@ -7,7 +7,7 @@ export default {
             dialogVisible: false, //编辑或添加弹窗标识
             originalTableList: [],
             tableList: [],
-            openDialogType: "", //弹窗类型add:'添加'，edit:'编辑'，detail:'详情'
+            openDialogType: "", //edit duplicate
             selectionIds: [], //选中项id数组
         }
     },
