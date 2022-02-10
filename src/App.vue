@@ -1,6 +1,6 @@
 <template>
-  <div class="page-container">
-    <el-form ref="queryForm" :model="formQuery" label-position="right" label-width="6em" size="medium" style=“width:500px>
+  <div class="page-container" v-loading="tableLoading">
+    <el-form ref="queryForm" label-position="right" label-width="6em" size="medium" style=“width:500px>
       <el-row>
         <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
       </el-row>
@@ -11,17 +11,17 @@
         <el-col :span=12>
           <el-col :span=8>
             <el-form-item label="operatorName">
-              <el-input v-model="formQuery.operatorName" />
+              <el-input v-model="queryOperatorName" />
             </el-form-item>
           </el-col>
           <el-col :span=8>
             <el-form-item label="domainId">
-              <el-input v-model="formQuery.domainId" placeholder="" />
+              <el-input v-model="queryDomainId" placeholder="" />
             </el-form-item>
           </el-col>
           <el-col :span=8>
             <el-form-item label="ENV">
-              <el-input v-model="formQuery.ENV" placeholder="" />
+              <el-input v-model="queryENV" placeholder="" />
             </el-form-item>
           </el-col>
         </el-col>
@@ -190,6 +190,15 @@ import {
 } from "@api/admin/user.js";
 
 import mixins from "@/mixins/page.js";
+// import VueLoading from 'vuejs-loading-plugin'
+// Vue.use(VueLoading)
+// Vue.use(VueLoading, {
+//   dark: true, // default false
+//   text: 'Ladataan', // default 'Loading'
+//   loading: true, // default false
+//   background: 'rgb(255,0,0)', // set custom background
+//   classes: ['myclass'] // array, object or string
+// })
 
 const formQuery = {
   operatorName: "",
@@ -297,43 +306,40 @@ export default {
 
   computed: {},
   created() {
-
+    this.getSitesTableList();
   },
   methods: {
-    getTableListByQuery(qOperatorName, qDomainId, env) {
-      this.queryOperatorName = qOperatorName;
-      this.queryDomainId = qDomainId;
-      this.queryENV = env;
-
-      this.getTableList();
-    },
-    getTableList() {
+    getSitesTableList() {
+      this.tableLoading = true;
       axios.get(g_server_sites_url).then(resp => {
         this.tableList = filterData(resp.data.list, this.queryOperatorName, this.queryDomainId, this.queryENV);
         this.total = this.tableList.length;
-      });
-
-      this.tableLoading = true;
-      setTimeout(() => {
         this.tableLoading = false;
-      }, 300);
+      });
     },
 
     editBeforeCallback(row) {
       this.row = row;
     },
-
+    handleQuery() {
+      this.getSitesTableList();
+    },
+    handleReset() {
+      this.queryOperatorName = ''
+      this.queryDomainId = ''
+      this.queryENV = ''
+      this.getSitesTableList();
+    },
     onDialogConfirm() {
       this.dialogVisible = false;
       this.$refs["dialogForm"].validate((valid) => {
         if (valid) {
-          this.formQuery.avatar = this.avatarUrl;
           //添加提交
           if (this.openDialogType == "duplicate") {
             // eslint-disable-next-line no-unused-vars
             addUser().then((res) => {
               this.dialogVisible = false;
-              this.getTableList();
+              this.getSitesTableList();
               this.$message.success("Add successfully");
             });
           }
@@ -342,7 +348,7 @@ export default {
               if (resp.status == 200 && resp.statusText == 'OK' && resp.data['status'] == 'ok') {
                 console.log(resp.data);
                 this.dialogVisible = false;
-                this.getTableList();
+                this.getSitesTableList();
                 this.$message.success("Operation successfully");
               }
               else {

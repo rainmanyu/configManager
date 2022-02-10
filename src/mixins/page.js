@@ -27,7 +27,6 @@ export default {
     },
     created() {
         this.init();
-        this.getTableList();
     },
     methods: {
         init() {
@@ -35,21 +34,14 @@ export default {
         },
         //查询
         handleSearch() {
-            this.searchBeforeCallback();
-            if (this.tableQuery && this.tableQuery.page) {
-                this.tableQuery.page = 1;
-            }
-            this.getTableList();
+
         },
         //查询前回调
         searchBeforeCallback() {
 
         },
         handleReset() {
-            this.formQuery.operatorName = ''
-            this.formQuery.domainId = ''
-            this.formQuery.ENV = ''
-            this.getTableListByQuery(this.formQuery.operatorName, this.formQuery.domainId, this.formQuery.ENV);
+
         },
         //重置前回调
         resetBeforeCallback() {
@@ -63,7 +55,7 @@ export default {
         },
 
         handleQuery() {
-            this.getTableListByQuery(this.formQuery.operatorName, this.formQuery.domainId, this.formQuery.ENV);
+
         },
         addBeforeCallback() {
 
@@ -109,21 +101,7 @@ export default {
 
         //删除成功回调,重新设置page，刷新列表
         delSuccessCallback(type = 'all') {
-            //判断最后一页是否全部都删除,全删除page-1；只有1页page=1
-            let totalPage = Math.ceil(this.total / (this.tableQuery.limit || this.tableQuery.pageSize || this.tableQuery.size)); //总页数
-            if (this.tableQuery.page == totalPage) {
-                //处在最后一页
-                let lastPageCount = this.tableList.length % (this.tableQuery.limit || this.tableQuery.pageSize || this.tableQuery.size);
-                if (lastPageCount == (type == 'all' ? this.selectionIds.length : 1)) {
-                    totalPage > 1 ?
-                        (this.tableQuery.page -= 1) :
-                        (this.tableQuery.page = 1);
-                }
-            }
-            //刷新列表数据
-            this.getTableList();
-            this.$message.success('删除成功')
-
+            print(type)
         },
         //关闭（新增或编辑）弹窗，恢复表单数据去除表单校验
         onCloseDialog() {
