@@ -50,8 +50,7 @@ npm run build
 -- build for production
 
 [//]: # (nohup node config_index.js &)
-rm -rf /ts-manager/norway_sites
-cp -R dist /ts-manager/norway_sites
+rm -rf /ts-manager/norway_sites;cp -R dist /ts-manager/norway_sites
 enter /ts-manager
 nohup node index.js &
 

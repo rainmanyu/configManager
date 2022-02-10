@@ -28,18 +28,21 @@
         <el-col :span=6></el-col>
       </el-row>
       <el-row>
-        <el-col :span=10>
+        <el-col :span=9>
           <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
         </el-col>
-        <el-col :span=4>
-          <el-col :span=12>
+        <el-col :span=6>
+          <el-col :span=6>
             <el-button @click="handleQuery">Query</el-button>
           </el-col>
-          <el-col :span=12>
+          <el-col :span=6>
             <el-button @click="handleReset">Reset</el-button>
           </el-col>
+          <el-col :span=12>
+            <el-button @click="handleUpdateVersion">Update Version</el-button>
+          </el-col>
         </el-col>
-        <el-col :span=10></el-col>
+        <el-col :span=9></el-col>
       </el-row>
     </el-form>
 
@@ -234,7 +237,7 @@ const row = {
 
 
 import axios from "axios";
-import {g_server_site_url, g_server_sites_url} from "@/config/config";
+import {g_server_site_url, g_server_sites_url, g_server_update_version_url} from "@/config/config";
 
 function filterData(data, queryOperatorName, queryDomainId, queryENV){
   let rtnTableList = [];
@@ -329,6 +332,19 @@ export default {
       this.queryDomainId = ''
       this.queryENV = ''
       this.getSitesTableList();
+    },
+    handleUpdateVersion() {
+      this.tableLoading = true;
+      axios.get(g_server_update_version_url).then(resp => {
+        if (resp.status == 200 && resp.statusText == 'OK' && resp.data['status'] == 'ok') {
+          this.$message.success("Update version successfully. Spent time:" + resp.data['spent_time']);
+        }
+        else {
+          this.$message.success("Update version failed");
+        }
+
+        this.tableLoading = false;
+      });
     },
     onDialogConfirm() {
       this.dialogVisible = false;
