@@ -30,9 +30,7 @@
   </div>
 </template>
 <script>
-import verficodeView from "@/components/verficode.vue";
 export default {
-  components: { verficodeView },
   data() {
     return {
       ramdoCode: "", //随机验证码
