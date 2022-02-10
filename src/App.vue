@@ -291,7 +291,9 @@ function isNotEmpty(obj) {
 }
 
 function isMatch(regex, content) {
-  return (content.indexOf(regex) != -1) ;
+  let content_lowercase = content.toLowerCase();
+  let regex_lowercase = regex.toLowerCase();
+  return (content_lowercase.indexOf(regex_lowercase) != -1) ;
 }
 
 export default {
