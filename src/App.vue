@@ -1,5 +1,8 @@
 <template>
   <div class="page-container" v-loading="tableLoading">
+    
+    <div class="tableLine"><span class="midText"></span></div>
+
     <el-form ref="queryForm" label-position="right" label-width="6em" size="medium" style=“width:500px>
       <el-row>
         <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
@@ -46,10 +49,14 @@
       </el-row>
     </el-form>
 
+    <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
+    <div class="tableLine"><span class="midText"></span></div>
+    <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
+
     <el-table ref="table" v-loading="tableLoading" class="pi-table" :data="tableList" header-row-class-name="table-header"
               @selection-change="handleSelectionChange">
 
-      <el-table-column label="Operator" align="center" prop="operatorName" sortable width="200" />
+      <el-table-column label="Operator" align="center" prop="operatorName" width="200" />
       <el-table-column label="domainId" align="center" prop="domainId" width="80"/>
       <el-table-column label="ENV" align="center" prop="environment" width="120" />
       <el-table-column label="status" align="center" prop="status" />
@@ -387,7 +394,7 @@ export default {
         return item.id;
       });
     },
-    //头像图片上传成功
+ 
     onUploadAvatarSuccess(res) {
       this.avatarUrl = res.data;
     },
@@ -403,4 +410,22 @@ export default {
     border-radius: 50%;
   }
 }
+
+.tableLine {
+    position: relative;
+    margin: 0 auto;
+    // width: 600px;
+    height: 2px;
+    background-color: #d4d4d4;
+    text-align: center;
+    font-size: 16px;
+    color: rgba(101, 101, 101, 1);
+  }
+ .midText {
+    position: absolute;
+    left: 50%;
+    background-color: #ffffff;
+    padding: 0 15px;
+    transform: translateX(-50%) translateY(-50%);
+  }
 </style>
