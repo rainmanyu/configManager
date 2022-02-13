@@ -8,7 +8,6 @@ import utils from './utils/index';
 
 import ElementUI from 'element-ui';
 import piButton from './components/button/install';
-import piPagination from './components/pagination/install';
 import piDialog from './components/dialog/install';
 import piQuerybar from './components/querybar/install';
 import piQuerybarItem from './components/querybarItem/install';
@@ -18,9 +17,7 @@ import piQuerybarItem from './components/querybarItem/install';
 
 Vue.config.productionTip = false
 Vue.use(ElementUI);
-
 Vue.use(piButton);
-Vue.use(piPagination);
 Vue.use(piDialog);
 Vue.use(piQuerybar);
 Vue.use(piQuerybarItem);
