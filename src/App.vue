@@ -300,7 +300,7 @@ const formQuery = {
 const init_site = {
   "operatorGroup": "",
   "operatorName": "",
-  "domainId": -1,
+  "domainId":0,
   "gmENV": "stage",
   "partnerID": "",
   "partnerKey": "",
@@ -320,7 +320,8 @@ const init_site = {
   "casino_version_tag": "not_ready",
   "casino_version_deploy_time": "not_ready",
   "frontend": "EM_FE",
-  "update_time": ""
+  "update_time": "",
+  "key":"0"
 };
 
 
@@ -497,21 +498,74 @@ export default {
       this.dialogVisible = false;
     },
 
-    onNewDialogConfirm() {
-      let domainId = this.new_site.domainId;
-      console.log(domainId)
-      if (domainId == "" || domainId == null || domainId == undefined) {
-        this.$message.error("domain id is invalid. empty value");
-      }
-      else if (domainId === -1) {
-        this.$message.error("domain id is invalid. incorrect domain idd value.");
+    isNumeric(number) {
+      let numReg = /^[0-9]*$/
+      let numRe = new RegExp(numReg)
+      if (!numRe.test(number)) {
+        return false;
       }
       else {
-        this.$confirm("Are you sure?").then(() => {
-          //do something...
+        return true;
+      }
+    },
+
+    onNewDialogConfirm() {
+      //validate operator name
+      let operatorName = this.new_site.operatorName;
+      console.log(operatorName);
+      if (operatorName === "" || operatorName === null || operatorName === undefined) {
+        this.$message.error("Operator name can not be empty");
+        return;
+      }
+
+      //validate domainId
+      let domainId = this.new_site.domainId;
+      if (domainId === "" || domainId === null || domainId === undefined) {
+        this.$message.error("domain id is invalid. empty value");
+        return;
+      }
+
+      if (domainId === 0 || domainId === '0' || !this.isNumeric(domainId)) {
+        this.$message.error("domain id is invalid. incorrect domain id value domainId:" + domainId);
+        return;
+      }
+      else {
+        axios.get(g_server_site_url+this.new_site.domainId).then(resp => {
+          if (resp.status == 200 && resp.statusText == 'OK') {
+            if (resp.data != null) {
+              this.$confirm("Site already existed under this domainId. Continue?")
+                  .then(() => {
+                    this.httpCreateNewSite(this.new_site);
+                  })
+                  .catch(() => {
+
+                  })
+            }
+            else {
+              this.httpCreateNewSite(this.new_site);
+            }
+          }
+          else {
+            this.$message.error("API Call failed");
+          }
         });
       }
     },
+
+    httpCreateNewSite(site) {
+      site.key = site.domainId;
+      axios.post(g_server_site_url+site['key'], site).then(resp => {
+        if (resp.status == 200 && resp.statusText == 'OK' && resp.data['status'] == 'ok') {
+          this.newDialogVisible = false;
+          this.getSitesTableList();
+          this.$message.success("Add a new site successfully");
+        }
+        else {
+          this.$message.error("Add a new site failed");
+        }
+      });
+    },
+
     onNewDialogClose() {
       this.newDialogVisible = false;
     },
