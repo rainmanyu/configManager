@@ -6,13 +6,11 @@ import './style/index.css';
 import axios from "axios";
 
 import ElementUI from 'element-ui';
-import piButton from './components/button/install';
-import piDialog from './components/dialog/install';
+
 
 Vue.config.productionTip = false
 Vue.use(ElementUI);
-Vue.use(piButton);
-Vue.use(piDialog);
+
 
 Vue.prototype.$axios=axios;
 Vue.prototype.$bus=new Vue();

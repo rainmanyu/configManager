@@ -87,11 +87,8 @@
           <el-row>
             <el-col :span=9><div style="word-spacing:10px">{{"\xa0\xa0"}}</div></el-col>
             <el-col :span=6>
-              <el-col :span=12>
-                <img class="opt-icon" src="@/assets/images/common/edit_icon.png" @click="handleEdit(row)" />
-              </el-col>
-              <el-col :span=12>
-                <img class="opt-icon" src="@/assets/images/common/add_icon.png" @click="handleDuplicate(row)" />
+              <el-col :span=24>
+                <img class="opt-icon" src="@/images/edit_icon.png" @click="handleEdit(row)" />
               </el-col>
             </el-col>
             <el-col :span=9></el-col>
@@ -100,7 +97,7 @@
       </el-table-column>
     </el-table>
 
-    <pi-dialog class="pi-dialog" width="1500px" :visible.sync="dialogVisible" :title="getDialogTitle" >
+    <el-dialog class="pi-dialog" width="1500px" :visible.sync="dialogVisible" :title="getDialogTitle" >
       <el-form ref="dialogForm"
                :model="row"
                label-position="right" label-width="6em" style="margin: 0 50px 0 30px" size="medium">
@@ -224,9 +221,9 @@
         </el-row>
 
       </el-form>
-    </pi-dialog>
+    </el-dialog>
 
-    <pi-dialog class="pi-dialog" width="600px" :visible.sync="newDialogVisible" title="New" >
+    <el-dialog class="pi-dialog" width="600px" :visible.sync="newDialogVisible" title="New" >
       <el-form ref="dialogForm"
                :model="new_site"
                label-position="right" label-width="6em" style="margin: 0 50px 0 30px" size="medium">
@@ -287,7 +284,7 @@
           <el-col :span=4></el-col>
         </el-row>
       </el-form>
-    </pi-dialog>
+    </el-dialog>
   </div>
 </template>
 <script>
