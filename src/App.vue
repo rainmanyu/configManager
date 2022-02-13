@@ -55,7 +55,7 @@
         <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
       </el-col>
       <el-col :span=3>
-        <el-button @click="handleUpdateVersion">Update Version</el-button>
+        <el-button @click="handleUpdateVersion">Update tag</el-button>
       </el-col>
       <el-col :span=2>
         <el-button @click="handleNew">New</el-button>
