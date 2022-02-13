@@ -289,9 +289,7 @@
 
 import axios from "axios";
 import {g_server_site_url, g_server_sites_url, g_server_update_version_url} from "@/config";
-import Vue from "vue";
-import VueSimpleAlert from "vue-simple-alert";
-Vue.use(VueSimpleAlert)
+
 
 const formQuery = {
   operatorName: "",
