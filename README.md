@@ -38,6 +38,8 @@ conf/config.js
 server sites
 http://10.2.47.17:9888
 
+install alert
+npm i vue-simple-alert
 
 10.3.240.11(ts-manager rainman)
 /rainman

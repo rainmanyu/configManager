@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import App from './App.vue';
-import store from './store';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import axios from "axios";
@@ -11,7 +10,6 @@ import piPagination from './components/pagination/install';
 import piDialog from './components/dialog/install';
 import piQuerybar from './components/querybar/install';
 import piQuerybarItem from './components/querybarItem/install';
-import permission from './directive/permission/install';
 import inputDirective from './directive/input/install';
 import './style/index.css';
 
@@ -24,7 +22,6 @@ Vue.use(piPagination);
 Vue.use(piDialog);
 Vue.use(piQuerybar);
 Vue.use(piQuerybarItem);
-Vue.use(permission);
 Vue.use(inputDirective)
 
 Vue.prototype.$utils= utils;
@@ -33,6 +30,5 @@ Vue.prototype.$bus=new Vue();
 
 
 new Vue({
-  store,
   render: h => h(App)
 }).$mount('#app')

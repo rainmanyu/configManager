@@ -35,14 +35,11 @@
           <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
         </el-col>
         <el-col :span=6>
-          <el-col :span=6>
+          <el-col :span=12>
             <el-button @click="handleQuery">Query</el-button>
           </el-col>
-          <el-col :span=6>
-            <el-button @click="handleReset">Reset</el-button>
-          </el-col>
           <el-col :span=12>
-            <el-button @click="handleUpdateVersion">Update Version</el-button>
+            <el-button @click="handleReset">Reset</el-button>
           </el-col>
         </el-col>
         <el-col :span=9></el-col>
@@ -53,13 +50,31 @@
     <div class="tableLine"><span class="midText"></span></div>
     <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
 
-    <el-table ref="table" v-loading="tableLoading" class="pi-table" :data="tableList" header-row-class-name="table-header"
+    <el-row>
+      <el-col :span=19>
+        <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
+      </el-col>
+      <el-col :span=3>
+        <el-button @click="handleUpdateVersion">Update Version</el-button>
+      </el-col>
+      <el-col :span=2>
+        <el-button @click="handleNew">New</el-button>
+      </el-col>
+    </el-row>
+
+    <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
+    <div class="tableLine"><span class="midText"></span></div>
+    <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
+
+    <el-table ref="table" v-loading="tableLoading" :data="tableList" header-row-class-name="table-header"
+              :row-class-name="tableRowClassName"
               @selection-change="handleSelectionChange">
 
       <el-table-column label="Operator" align="center" prop="operatorName" width="200" />
       <el-table-column label="domainId" align="center" prop="domainId" width="80"/>
       <el-table-column label="ENV" align="center" prop="environment" width="120" />
-      <el-table-column label="status" align="center" prop="status" />
+      <el-table-column label="key" align="center" prop="key" width="80" />
+      <el-table-column label="frontend" align="center" prop="frontend" />
       <el-table-column label="playerAPI" align="center" prop="playerAPI" />
       <el-table-column label="tag" align="center" prop="player_version_tag" />
       <el-table-column label="deploy time" align="center" prop="player_version_deploy_time" />
@@ -86,18 +101,19 @@
     </el-table>
 
     <pi-dialog class="pi-dialog" width="1500px" :visible.sync="dialogVisible" :title="getDialogTitle" >
-      <el-form ref="dialogForm" :model="row" label-position="right" label-width="6em" style="margin: 0 50px 0 30px" size="medium">
+      <el-form ref="dialogForm"
+               :model="row"
+               label-position="right" label-width="6em" style="margin: 0 50px 0 30px" size="medium">
         <el-row>
           <el-col :span=8>
             <el-form-item label="Operator">
-              <el-input v-model="row.operatorName" />
+              <el-input v-model="row.operatorName"/>
             </el-form-item>
           </el-col>
           <el-col :span=8>
-<!--            :dit-inpclass="{ 'eut':(openDialogType=='edit'), 'no-edit-input':(openDialogType!='edit')}"-->
             <el-form-item label="domainId" >
               <el-input v-model="row.domainId" placeholder="" v-bind:readonly="openDialogType=='edit'"
-                        :class="{ 'edit-input':(openDialogType=='edit'), 'no-edit-input':(openDialogType!='edit')}"
+                        :class="{ 'no-edit-input':(openDialogType=='edit'), 'edit-input':(openDialogType=='duplicate')}"
               />
             </el-form-item>
           </el-col>
@@ -139,7 +155,13 @@
           </el-col>
           <el-col :span=8>
             <el-form-item label="frontend">
-              <el-input v-model="row.frontend" placeholder="" />
+              <el-select v-model="row.frontend" placeholder="Select">
+                <el-option
+                    v-for="item in frontend_options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"/>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -153,14 +175,14 @@
           <el-col :span=6>
             <el-form-item label="version tag">
               <el-input v-model="row.player_version_tag" placeholder="" v-bind:readonly="openDialogType=='edit'"
-                        :class="{ 'edit-input':(openDialogType=='edit'), 'no-edit-input':(openDialogType!='edit')}"
+                        :class="{ 'no-edit-input':(openDialogType=='edit'), 'edit-input':(openDialogType=='duplicate')}"
               />
             </el-form-item>
           </el-col>
           <el-col :span=6>
             <el-form-item label="deploy time">
               <el-input v-model="row.player_version_deploy_time" placeholder="" v-bind:readonly="openDialogType=='edit'"
-                        :class="{ 'edit-input':(openDialogType=='edit'), 'no-edit-input':(openDialogType!='edit')}"
+                        :class="{ 'no-edit-input':(openDialogType=='edit'), 'edit-input':(openDialogType=='duplicate')}"
               />
             </el-form-item>
           </el-col>
@@ -175,14 +197,14 @@
           <el-col :span=6>
             <el-form-item label="version tag">
               <el-input v-model="row.casino_version_tag" placeholder="" v-bind:readonly="openDialogType=='edit'"
-                        :class="{ 'edit-input':(openDialogType=='edit'), 'no-edit-input':(openDialogType!='edit')}"
+                        :class="{ 'no-edit-input':(openDialogType=='edit'), 'edit-input':(openDialogType=='duplicate')}"
               />
             </el-form-item>
           </el-col>
           <el-col :span=6>
             <el-form-item label="deploy time">
               <el-input v-model="row.casino_version_deploy_time" placeholder="" v-bind:readonly="openDialogType=='edit'"
-                        :class="{ 'edit-input':(openDialogType=='edit'), 'no-edit-input':(openDialogType!='edit')}"
+                        :class="{ 'no-edit-input':(openDialogType=='edit'), 'edit-input':(openDialogType=='duplicate')}"
               />
             </el-form-item>
           </el-col>
@@ -203,23 +225,79 @@
 
       </el-form>
     </pi-dialog>
+
+    <pi-dialog class="pi-dialog" width="600px" :visible.sync="newDialogVisible" title="New" >
+      <el-form ref="dialogForm"
+               :model="new_site"
+               label-position="right" label-width="6em" style="margin: 0 50px 0 30px" size="medium">
+        <el-row>
+          <el-col :span=12>
+            <el-form-item label="Name">
+              <el-input v-model="new_site.operatorName"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span=1>
+            <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
+          </el-col>
+          <el-col :span=11>
+            <el-form-item label="domainId" >
+              <el-input v-model="new_site.domainId" placeholder="" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span=12>
+            <el-form-item label="frontend">
+              <el-select v-model="row.frontend" placeholder="Select">
+                <el-option
+                    v-for="item in frontend_options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span=1>
+            <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
+          </el-col>
+          <el-col :span=11>
+            <el-form-item label="environment">
+              <el-select v-model="new_site.environment" placeholder="Select">
+                <el-option
+                    v-for="item in environment_options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span=8>-</el-col>
+          <el-col :span=10>
+            <el-col :span=12>
+              <el-button @click="onNewDialogConfirm">Confirm</el-button>
+            </el-col>
+            <el-col :span=12>
+              <el-button @click="onNewDialogClose">Cancel</el-button>
+            </el-col>
+          </el-col>
+          <el-col :span=4></el-col>
+        </el-row>
+      </el-form>
+    </pi-dialog>
   </div>
 </template>
 <script>
-import {
-  addUser
-} from "@api/admin/user.js";
 
-import mixins from "@/mixins/page.js";
-// import VueLoading from 'vuejs-loading-plugin'
-// Vue.use(VueLoading)
-// Vue.use(VueLoading, {
-//   dark: true, // default false
-//   text: 'Ladataan', // default 'Loading'
-//   loading: true, // default false
-//   background: 'rgb(255,0,0)', // set custom background
-//   classes: ['myclass'] // array, object or string
-// })
+import axios from "axios";
+import {g_server_site_url, g_server_sites_url, g_server_update_version_url} from "@/config/config";
+import Vue from "vue";
+import mixins from "@/page.js";
+import VueSimpleAlert from "vue-simple-alert";
+Vue.use(VueSimpleAlert)
 
 const formQuery = {
   operatorName: "",
@@ -227,35 +305,32 @@ const formQuery = {
   ENV: ""
 };
 
-const row = {
+const init_site = {
   "operatorGroup": "",
-  "operatorName": "Tringobet.com",
-  "domainId": 2562,
+  "operatorName": "",
+  "domainId": -1,
   "gmENV": "stage",
-  "partnerID": "TrigobetID",
-  "partnerKey": "TrigobetCode",
+  "partnerID": "",
+  "partnerKey": "",
   "environment": "stage",
   "region": "",
   "status": "",
-  "playerAPI": "https://tringobet-com-api.stage.norway.everymatrix.com/v1/player/swagger-ui.html",
-  "casinoAPI": "https://tringobet-com-api.stage.norway.everymatrix.com/v1/casino/swagger-ui.html",
-  "liveLobby": "https://tringobet-com-api.stage.norway.everymatrix.com/v1/encoder/lobby/updates/{vendor}/{tableId}",
+  "playerAPI": "",
+  "casinoAPI": "",
+  "liveLobby": "",
   "GIC": "",
   "Notification": "",
   "BalanceUpdate": "",
-  "player_base": "https://tringobet-com-api.stage.norway.everymatrix.com",
-  "player_version_tag": "tag-master-V1.60.1",
-  "player_version_deploy_time": "2022-01-28 07:58:14",
-  "casino_base": "https://tringobet-com-api.stage.norway.everymatrix.com",
-  "casino_version_tag": "tag-master-V1.60.2",
-  "casino_version_deploy_time": "2022-01-29 05:48:21",
-  "frontend": "EM_FE"
+  "player_base": "",
+  "player_version_tag": "not_ready",
+  "player_version_deploy_time": "not_ready",
+  "casino_base": "not_ready",
+  "casino_version_tag": "not_ready",
+  "casino_version_deploy_time": "not_ready",
+  "frontend": "EM_FE",
+  "update_time": ""
 };
 
-
-
-import axios from "axios";
-import {g_server_site_url, g_server_sites_url, g_server_update_version_url} from "@/config/config";
 
 function filterData(data, queryOperatorName, queryDomainId, queryENV){
   let rtnTableList = [];
@@ -320,11 +395,28 @@ export default {
     return {
       tableList: [],
       formQuery: Object.assign({}, formQuery),
-      row: Object.assign({}, row),
+      row: Object.assign({}, init_site),
+      new_site: Object.assign({}, init_site),
+      edit_row: Object.assign({}, init_site),
+      duplicate_row: Object.assign({}, init_site),
       queryOperatorName: "",
       queryDomainId : "",
-      queryENV : ""
-    };
+      queryENV : "",
+      frontend_options: [{
+        value: 'NONE_EM_FE',
+        label: 'NONE_EM_FE'
+      }, {
+        value: 'EM_FE',
+        label: 'EM_FE'
+      }],
+      environment_options: [{
+        value: 'stage',
+        label: 'stage'
+      }, {
+        value: 'production',
+        label: 'production'
+      }],
+    }
   },
 
   computed: {},
@@ -342,7 +434,16 @@ export default {
     },
 
     editBeforeCallback(row) {
-      this.row = row;
+      this.row = Object.assign({}, row);
+
+      if (this.openDialogType == "duplicate") {
+        this.row.operatorName = '';
+        this.row.domainId = '';
+        this.row.player_version_tag = 'not_ready';
+        this.row.player_version_deploy_time = 'not_ready';
+        this.row.casino_version_tag = 'not_ready';
+        this.row.casino_version_deploy_time = 'not_ready';
+      }
     },
     handleQuery() {
       this.getSitesTableList();
@@ -352,6 +453,9 @@ export default {
       this.queryDomainId = ''
       this.queryENV = ''
       this.getSitesTableList();
+    },
+    handleNew() {
+      this.newDialogVisible = true
     },
     handleUpdateVersion() {
       this.tableLoading = true;
@@ -370,30 +474,38 @@ export default {
       this.dialogVisible = false;
       this.$refs["dialogForm"].validate((valid) => {
         if (valid) {
-          //添加提交
-          if (this.openDialogType == "duplicate") {
-            // eslint-disable-next-line no-unused-vars
-            addUser().then((res) => {
+          axios.post(g_server_site_url+this.row['key'], this.row).then(resp => {
+            if (resp.status == 200 && resp.statusText == 'OK' && resp.data['status'] == 'ok') {
+              console.log(resp.data);
               this.dialogVisible = false;
               this.getSitesTableList();
-              this.$message.success("Add successfully");
-            });
-          }
-          else {
-            axios.post(g_server_site_url+this.row['domainId'], this.row).then(resp => {
-              if (resp.status == 200 && resp.statusText == 'OK' && resp.data['status'] == 'ok') {
-                console.log(resp.data);
-                this.dialogVisible = false;
-                this.getSitesTableList();
-                this.$message.success("Operation successfully");
-              }
-              else {
-                this.$message.success("Operation failed");
-              }
-            });
-          }
+              this.$message.success("Operation successfully");
+            }
+            else {
+              this.$message.success("Operation failed");
+            }
+          });
         }
       });
+    },
+
+    onNewDialogConfirm() {
+      let domainId = this.new_site.domainId;
+      console.log(domainId)
+      if (domainId == "" || domainId == null || domainId == undefined) {
+        this.$message.error("domain id is invalid. empty value");
+      }
+      else if (domainId === -1) {
+        this.$message.error("domain id is invalid. incorrect domain idd value.");
+      }
+      else {
+        this.$confirm("Are you sure?").then(() => {
+          //do something...
+        });
+      }
+    },
+    onNewDialogClose() {
+      this.newDialogVisible = false;
     },
 
     closeDialogBeforeCallback() {
@@ -408,6 +520,16 @@ export default {
  
     onUploadAvatarSuccess(res) {
       this.avatarUrl = res.data;
+    },
+
+    tableRowClassName({row, rowIndex}) {
+      if (row.domainId != row.key) {
+        console.log(row.domainId + '-' + row.key + '-' + rowIndex + '-not_equal');
+        return 'info-row';
+      } else  {
+        console.log(row.domainId + '-' + row.key + '-' + rowIndex + '-equal');
+        return '';
+      }
     },
   },
 };
@@ -441,18 +563,21 @@ export default {
   }
 
 
-
 </style>
 <style scoped>
+.no-edit-input>>>.el-input__inner{
+  font-size: 18px!important;
+  color:#000000!important;
+  background-color:#EEEEEE;
+  font-family: cursive!important;
+}
+
 .edit-input>>>.el-input__inner{
   font-size: 18px!important;
   color:#000000!important;
-  background-color:#FF8844;
+  background-color:#FFEEBB;
   font-family: cursive!important;
 }
 
 
-.no-edit-input>>>.el-input__inner{
-
-}
 </style>
