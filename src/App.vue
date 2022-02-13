@@ -293,7 +293,7 @@
 <script>
 
 import axios from "axios";
-import {g_server_site_url, g_server_sites_url, g_server_update_version_url} from "@/config/config";
+import {g_server_site_url, g_server_sites_url, g_server_update_version_url} from "@/config";
 import Vue from "vue";
 import mixins from "@/page.js";
 import VueSimpleAlert from "vue-simple-alert";
