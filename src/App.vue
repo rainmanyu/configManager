@@ -97,7 +97,7 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog class="pi-dialog" width="1500px" :visible.sync="dialogVisible" :title="getDialogTitle" >
+    <el-dialog class="pi-dialog" width="1500px" :visible.sync="dialogVisible" title="Edit" >
       <el-form ref="dialogForm"
                :model="row"
                label-position="right" label-width="6em" style="margin: 0 50px 0 30px" size="medium">
@@ -109,9 +109,7 @@
           </el-col>
           <el-col :span=8>
             <el-form-item label="domainId" >
-              <el-input v-model="row.domainId" placeholder="" v-bind:readonly="openDialogType=='edit'"
-                        :class="{ 'no-edit-input':(openDialogType=='edit'), 'edit-input':(openDialogType=='duplicate')}"
-              />
+              <el-input v-model="row.domainId" placeholder="" readonly=true />
             </el-form-item>
           </el-col>
           <el-col :span=8>
@@ -292,7 +290,6 @@
 import axios from "axios";
 import {g_server_site_url, g_server_sites_url, g_server_update_version_url} from "@/config";
 import Vue from "vue";
-import mixins from "@/page.js";
 import VueSimpleAlert from "vue-simple-alert";
 Vue.use(VueSimpleAlert)
 
@@ -387,9 +384,16 @@ function isMatch(regex, content) {
 }
 
 export default {
-  mixins: [mixins],
   data() {
     return {
+      tableQuery: {}, //表格搜索接口参数
+      total: 0,
+      tableLoading: false,
+      dialogVisible: false,
+      newDialogVisible: false,
+      originalTableList: [],
+      openDialogType: "", //edit duplicate
+      selectionIds: [],
       tableList: [],
       formQuery: Object.assign({}, formQuery),
       row: Object.assign({}, init_site),
@@ -412,7 +416,7 @@ export default {
       }, {
         value: 'production',
         label: 'production'
-      }],
+      }]
     }
   },
 
@@ -454,6 +458,11 @@ export default {
     handleNew() {
       this.newDialogVisible = true
     },
+    handleEdit(row) {
+      this.openDialogType = "edit";
+      this.editBeforeCallback(row);
+      this.dialogVisible = true;
+    },
     handleUpdateVersion() {
       this.tableLoading = true;
       axios.get(g_server_update_version_url).then(resp => {
@@ -484,6 +493,10 @@ export default {
           });
         }
       });
+    },
+
+    onCloseDialog() {
+      this.dialogVisible = false;
     },
 
     onNewDialogConfirm() {
