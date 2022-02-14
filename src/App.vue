@@ -105,13 +105,13 @@
             <el-col :span=9><div style="word-spacing:10px">{{"\xa0\xa0"}}</div></el-col>
             <el-col :span=6>
               <el-col :span=12>
-                <img class="opt-icon" src="@/images/edit_icon.png" @click="handleEdit(row)" />
+                <img class="opt-icon" src="@/edit_icon.png" @click="handleEdit(row)" />
               </el-col>
               <el-col :span=1>
                 <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
               </el-col>
               <el-col :span=11>
-                <img class="opt-icon" src="@/images/delete_icon.png" @click="handleDelete(row)" />
+                <img class="opt-icon" src="@/delete_icon.png" @click="handleDelete(row)" />
               </el-col>
             </el-col>
             <el-col :span=9></el-col>
