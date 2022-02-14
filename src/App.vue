@@ -8,23 +8,31 @@
         <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
       </el-row>
       <el-row>
-        <el-col :span=5>
+        <el-col :span=8>
           <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
         </el-col>
-        <el-col :span=14>
-          <el-col :span=6>
+        <el-col :span=8>
+          <el-col :span=12>
             <el-form-item label="operatorName">
-              <el-input v-model="queryOperatorName" />
+              <el-input v-model="queryOperatorName" @input="handleQuery" />
             </el-form-item>
           </el-col>
-          <el-col :span=6>
+          <el-col :span=12>
             <el-form-item label="domainId">
-              <el-input v-model="queryDomainId" placeholder="" />
+              <el-input v-model="queryDomainId" placeholder="" @input="handleQuery" />
             </el-form-item>
           </el-col>
-          <el-col :span=6>
+        </el-col>
+        <el-col :span=8></el-col>
+      </el-row>
+      <el-row>
+        <el-col :span=8>
+          <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
+        </el-col>
+        <el-col :span=8>
+          <el-col :span=12>
             <el-form-item label="ENV">
-              <el-select v-model="queryENV" placeholder="Select">
+              <el-select v-model="queryENV" placeholder="Select" @change="handleQuery">
                 <el-option
                     v-for="item in query_environment_options"
                     :key="item.value"
@@ -33,9 +41,9 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span=6>
+          <el-col :span=12>
             <el-form-item label="frontend">
-              <el-select v-model="queryFrontend" placeholder="Select">
+              <el-select v-model="queryFrontend" placeholder="Select" @change="handleQuery">
                 <el-option
                     v-for="item in query_frontend_options"
                     :key="item.value"
@@ -45,25 +53,18 @@
             </el-form-item>
           </el-col>
         </el-col>
-        <el-col :span=5></el-col>
-      </el-row>
-      <el-row>
-        <el-col :span=9>
-          <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
-        </el-col>
-        <el-col :span=6>
-          <el-col :span=12>
-            <el-button @click="handleQuery">Query</el-button>
+        <el-col :span=8>
+          <el-col :span=1>
+            <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
           </el-col>
-          <el-col :span=12>
+          <el-col :span=23>
             <el-button @click="handleReset">Reset</el-button>
           </el-col>
+
         </el-col>
-        <el-col :span=9></el-col>
       </el-row>
     </el-form>
-
-    <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
+    
     <div class="tableLine"><span class="midText"></span></div>
     <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
 
