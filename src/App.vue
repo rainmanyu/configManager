@@ -8,27 +8,44 @@
         <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
       </el-row>
       <el-row>
-        <el-col :span=6>
+        <el-col :span=5>
           <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
         </el-col>
-        <el-col :span=12>
-          <el-col :span=8>
+        <el-col :span=14>
+          <el-col :span=6>
             <el-form-item label="operatorName">
               <el-input v-model="queryOperatorName" />
             </el-form-item>
           </el-col>
-          <el-col :span=8>
+          <el-col :span=6>
             <el-form-item label="domainId">
               <el-input v-model="queryDomainId" placeholder="" />
             </el-form-item>
           </el-col>
-          <el-col :span=8>
+          <el-col :span=6>
             <el-form-item label="ENV">
-              <el-input v-model="queryENV" placeholder="" />
+              <el-select v-model="queryENV" placeholder="Select">
+                <el-option
+                    v-for="item in query_environment_options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span=6>
+            <el-form-item label="frontend">
+              <el-select v-model="queryFrontend" placeholder="Select">
+                <el-option
+                    v-for="item in query_frontend_options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"/>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-col>
-        <el-col :span=6></el-col>
+        <el-col :span=5></el-col>
       </el-row>
       <el-row>
         <el-col :span=9>
@@ -331,10 +348,10 @@ const init_site = {
 };
 
 
-function filterData(data, queryOperatorName, queryDomainId, queryENV){
+function filterData(data, queryOperatorName, queryDomainId, queryENV, queryFrontend){
   let rtnTableList = [];
 
-  //Query 1
+  //Query operator name
   if(isNotEmpty(queryOperatorName)){
     for (let i=0; i<data.length; i++)
     {
@@ -347,7 +364,7 @@ function filterData(data, queryOperatorName, queryDomainId, queryENV){
     rtnTableList = data;
   }
 
-  //Query 2
+  //Query domain id
   let rtnTableList2 = [];
   if(isNotEmpty(queryDomainId)){
     for (let i=0; i<rtnTableList.length; i++)
@@ -361,9 +378,9 @@ function filterData(data, queryOperatorName, queryDomainId, queryENV){
     rtnTableList2 = rtnTableList;
   }
 
-  //Query 3
+  //Query env
   let rtnTableList3 = [];
-  if(isNotEmpty(queryENV)){
+  if(isNotEmpty(queryENV) && queryENV != 'ALL'){
     for (let i=0; i<rtnTableList2.length; i++)
     {
       if (isMatch(queryENV.toString(), rtnTableList2[i].environment.toString())) {
@@ -375,7 +392,21 @@ function filterData(data, queryOperatorName, queryDomainId, queryENV){
     rtnTableList3 = rtnTableList2;
   }
 
-  return rtnTableList3;
+  //Query frontend
+  let rtnTableList4 = [];
+  if(isNotEmpty(queryFrontend) && queryFrontend != 'ALL'){
+    for (let i=0; i<rtnTableList3.length; i++)
+    {
+      if (isMatch(queryFrontend.toString(), rtnTableList3[i].frontend.toString())) {
+        rtnTableList4.push(rtnTableList3[i]);
+      }
+    }
+  }
+  else {
+    rtnTableList4 = rtnTableList3;
+  }
+
+  return rtnTableList4;
 }
 
 function isNotEmpty(obj) {
@@ -407,8 +438,19 @@ export default {
       duplicate_row: Object.assign({}, init_site),
       queryOperatorName: "",
       queryDomainId : "",
-      queryENV : "",
+      queryENV : "ALL",
+      queryFrontend : "ALL",
       frontend_options: [{
+        value: 'NONE_EM_FE',
+        label: 'NONE_EM_FE'
+      }, {
+        value: 'EM_FE',
+        label: 'EM_FE'
+      }],
+      query_frontend_options: [{
+        value: 'ALL',
+        label: 'ALL'
+      },{
         value: 'NONE_EM_FE',
         label: 'NONE_EM_FE'
       }, {
@@ -421,7 +463,18 @@ export default {
       }, {
         value: 'production',
         label: 'production'
+      }],
+      query_environment_options: [{
+        value: 'ALL',
+        label: 'ALL'
+      }, {
+        value: 'stage',
+        label: 'stage'
+      }, {
+        value: 'production',
+        label: 'production'
       }]
+
     }
   },
 
@@ -433,7 +486,7 @@ export default {
     getSitesTableList() {
       this.tableLoading = true;
       axios.get(g_server_sites_url).then(resp => {
-        this.tableList = filterData(resp.data.list, this.queryOperatorName, this.queryDomainId, this.queryENV);
+        this.tableList = filterData(resp.data.list, this.queryOperatorName, this.queryDomainId, this.queryENV, this.queryFrontend);
         this.total = this.tableList.length;
         this.tableLoading = false;
       });
@@ -457,7 +510,8 @@ export default {
     handleReset() {
       this.queryOperatorName = ''
       this.queryDomainId = ''
-      this.queryENV = ''
+      this.queryENV = 'ALL'
+      this.queryFrontend = 'ALL'
       this.getSitesTableList();
     },
     handleNew() {
