@@ -87,8 +87,14 @@
           <el-row>
             <el-col :span=9><div style="word-spacing:10px">{{"\xa0\xa0"}}</div></el-col>
             <el-col :span=6>
-              <el-col :span=24>
+              <el-col :span=12>
                 <img class="opt-icon" src="@/images/edit_icon.png" @click="handleEdit(row)" />
+              </el-col>
+              <el-col :span=1>
+                <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
+              </el-col>
+              <el-col :span=11>
+                <img class="opt-icon" src="@/images/delete_icon.png" @click="handleDelete(row)" />
               </el-col>
             </el-col>
             <el-col :span=9></el-col>
@@ -462,6 +468,24 @@ export default {
       this.editBeforeCallback(row);
       this.dialogVisible = true;
     },
+    handleDelete(row) {
+      let alertMessage = "Delete this site. domainId:" + row.domainId + ", key:" + row.key;
+      this.$confirm(alertMessage, "Delete " + row.operatorName)
+          .then(() => {
+            axios.delete(g_server_site_url+row['key']).then(resp => {
+              if (resp.status == 200 && resp.statusText == 'OK' && resp.data['status'] == 'ok' && resp.data['flag'] == 1) {
+                this.getSitesTableList();
+                this.$message.success("Delete successfully");
+              }
+              else {
+                this.$message.success("Delete failed");
+              }
+            });
+          })
+          .catch(() => {
+            this.$message.error("Canceled");
+          })
+    },
     handleUpdateVersion() {
       this.tableLoading = true;
       axios.get(g_server_update_version_url).then(resp => {
@@ -479,7 +503,7 @@ export default {
       this.dialogVisible = false;
       this.$refs["dialogForm"].validate((valid) => {
         if (valid) {
-          axios.post(g_server_site_url+this.row['key'], this.row).then(resp => {
+          axios.put(g_server_site_url+this.row['key'], this.row).then(resp => {
             if (resp.status == 200 && resp.statusText == 'OK' && resp.data['status'] == 'ok') {
               console.log(resp.data);
               this.dialogVisible = false;
