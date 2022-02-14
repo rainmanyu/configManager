@@ -489,6 +489,7 @@ export default {
       this.tableLoading = true;
       axios.get(g_server_update_version_url).then(resp => {
         if (resp.status == 200 && resp.statusText == 'OK' && resp.data['status'] == 'ok') {
+          this.getSitesTableList(true);
           this.$message.success("Update version successfully. Spent time:" + resp.data['spent_time']);
         }
         else {
