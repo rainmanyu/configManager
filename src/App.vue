@@ -347,68 +347,6 @@ const init_site = {
   "key":"0"
 };
 
-
-function filterData(data, queryOperatorName, queryDomainId, queryENV, queryFrontend){
-  let rtnTableList = [];
-
-  //Query operator name
-  if(isNotEmpty(queryOperatorName)){
-    for (let i=0; i<data.length; i++)
-    {
-      if (isMatch(queryOperatorName, data[i].operatorName)) {
-        rtnTableList.push(data[i]);
-      }
-    }
-  }
-  else {
-    rtnTableList = data;
-  }
-
-  //Query domain id
-  let rtnTableList2 = [];
-  if(isNotEmpty(queryDomainId)){
-    for (let i=0; i<rtnTableList.length; i++)
-    {
-      if (isMatch(queryDomainId.toString(), rtnTableList[i].domainId.toString())) {
-        rtnTableList2.push(rtnTableList[i]);
-      }
-    }
-  }
-  else {
-    rtnTableList2 = rtnTableList;
-  }
-
-  //Query env
-  let rtnTableList3 = [];
-  if(isNotEmpty(queryENV) && queryENV != 'ALL'){
-    for (let i=0; i<rtnTableList2.length; i++)
-    {
-      if (isMatch(queryENV.toString(), rtnTableList2[i].environment.toString())) {
-        rtnTableList3.push(rtnTableList2[i]);
-      }
-    }
-  }
-  else {
-    rtnTableList3 = rtnTableList2;
-  }
-
-  //Query frontend
-  let rtnTableList4 = [];
-  if(isNotEmpty(queryFrontend) && queryFrontend != 'ALL'){
-    for (let i=0; i<rtnTableList3.length; i++)
-    {
-      if (isMatch(queryFrontend.toString(), rtnTableList3[i].frontend.toString())) {
-        rtnTableList4.push(rtnTableList3[i]);
-      }
-    }
-  }
-  else {
-    rtnTableList4 = rtnTableList3;
-  }
-
-  return rtnTableList4;
-}
-
 function isNotEmpty(obj) {
   return !(obj==""||obj==null||obj==undefined);
 }
@@ -423,7 +361,6 @@ export default {
   data() {
     return {
       tableQuery: {}, //表格搜索接口参数
-      total: 0,
       tableLoading: false,
       dialogVisible: false,
       newDialogVisible: false,
@@ -431,6 +368,7 @@ export default {
       openDialogType: "", //edit duplicate
       selectionIds: [],
       tableList: [],
+      fullTableList: [],
       formQuery: Object.assign({}, formQuery),
       row: Object.assign({}, init_site),
       new_site: Object.assign({}, init_site),
@@ -480,16 +418,22 @@ export default {
 
   computed: {},
   created() {
-    this.getSitesTableList();
+    this.getSitesTableList(true);
   },
   methods: {
-    getSitesTableList() {
+    getSitesTableList(dirtyFlag) {
       this.tableLoading = true;
-      axios.get(g_server_sites_url).then(resp => {
-        this.tableList = filterData(resp.data.list, this.queryOperatorName, this.queryDomainId, this.queryENV, this.queryFrontend);
-        this.total = this.tableList.length;
+      if (dirtyFlag) {
+        axios.get(g_server_sites_url).then(resp => {
+          this.fullTableList = resp.data.list;
+          this.filterData();
+          this.tableLoading = false;
+        });
+      }
+      else {
+        this.filterData();
         this.tableLoading = false;
-      });
+      }
     },
 
     editBeforeCallback(row) {
@@ -505,14 +449,14 @@ export default {
       }
     },
     handleQuery() {
-      this.getSitesTableList();
+      this.getSitesTableList(false);
     },
     handleReset() {
       this.queryOperatorName = ''
       this.queryDomainId = ''
       this.queryENV = 'ALL'
       this.queryFrontend = 'ALL'
-      this.getSitesTableList();
+      this.getSitesTableList(false);
     },
     handleNew() {
       this.newDialogVisible = true
@@ -528,7 +472,7 @@ export default {
           .then(() => {
             axios.delete(g_server_site_url+row['key']).then(resp => {
               if (resp.status == 200 && resp.statusText == 'OK' && resp.data['status'] == 'ok' && resp.data['flag'] == 1) {
-                this.getSitesTableList();
+                this.getSitesTableList(true);
                 this.$message.success("Delete successfully");
               }
               else {
@@ -561,7 +505,7 @@ export default {
             if (resp.status == 200 && resp.statusText == 'OK' && resp.data['status'] == 'ok') {
               console.log(resp.data);
               this.dialogVisible = false;
-              this.getSitesTableList();
+              this.getSitesTableList(true);
               this.$message.success("Operation successfully");
             }
             else {
@@ -635,7 +579,7 @@ export default {
       axios.post(g_server_site_url+site['key'], site).then(resp => {
         if (resp.status == 200 && resp.statusText == 'OK' && resp.data['status'] == 'ok') {
           this.newDialogVisible = false;
-          this.getSitesTableList();
+          this.getSitesTableList(true);
           this.$message.success("Add a new site successfully");
         }
         else {
@@ -671,6 +615,73 @@ export default {
         return '';
       }
     },
+
+    filterData(){
+      let data = this.fullTableList;
+      let queryOperatorName = this.queryOperatorName;
+      let queryDomainId = this.queryDomainId;
+      let queryENV = this.queryENV;
+      let queryFrontend = this.queryFrontend;
+
+      let rtnTableList = [];
+
+      //Query operator name
+      if(isNotEmpty(queryOperatorName)){
+        for (let i=0; i<data.length; i++)
+        {
+          if (isMatch(queryOperatorName, data[i].operatorName)) {
+            rtnTableList.push(data[i]);
+          }
+        }
+      }
+      else {
+        rtnTableList = data;
+      }
+
+      //Query domain id
+      let rtnTableList2 = [];
+      if(isNotEmpty(queryDomainId)){
+        for (let i=0; i<rtnTableList.length; i++)
+        {
+          if (isMatch(queryDomainId.toString(), rtnTableList[i].domainId.toString())) {
+            rtnTableList2.push(rtnTableList[i]);
+          }
+        }
+      }
+      else {
+        rtnTableList2 = rtnTableList;
+      }
+
+      //Query env
+      let rtnTableList3 = [];
+      if(isNotEmpty(queryENV) && queryENV != 'ALL'){
+        for (let i=0; i<rtnTableList2.length; i++)
+        {
+          if (isMatch(queryENV.toString(), rtnTableList2[i].environment.toString())) {
+            rtnTableList3.push(rtnTableList2[i]);
+          }
+        }
+      }
+      else {
+        rtnTableList3 = rtnTableList2;
+      }
+
+      //Query frontend
+      let rtnTableList4 = [];
+      if(isNotEmpty(queryFrontend) && queryFrontend != 'ALL'){
+        for (let i=0; i<rtnTableList3.length; i++)
+        {
+          if (isMatch(queryFrontend.toString(), rtnTableList3[i].frontend.toString())) {
+            rtnTableList4.push(rtnTableList3[i]);
+          }
+        }
+      }
+      else {
+        rtnTableList4 = rtnTableList3;
+      }
+
+      this.tableList =  rtnTableList4;
+    }
   },
 };
 </script>
