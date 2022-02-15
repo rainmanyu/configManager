@@ -342,7 +342,7 @@ const formQuery = {
 
 const init_site = {
   "operatorGroup": "",
-  "operatorName": "",
+  "operatorName": "default",
   "domainId":0,
   "gmENV": "stage",
   "partnerID": "",
@@ -512,7 +512,7 @@ export default {
       axios.put(g_server_update_site_tag_url+row['key']).then(resp => {
         if (resp.status == 200 && resp.statusText == 'OK' && resp.data['status'] == 'ok') {
           this.getSitesTableList(true);
-          this.$message.success("Update site tag successfully. spent time:" + resp.data['spent_time']);
+          this.$message.success("Update site tag successfully. spent time:" + resp.data['spent_time'] + "s");
         }
         else {
           this.$message.error("Update site tag failed. error message:" + resp.data['errorMessage']);
@@ -521,18 +521,25 @@ export default {
       });
     },
     handleUpdateVersion() {
-      this.tableLoading = true;
-      axios.get(g_server_update_version_url).then(resp => {
-        if (resp.status == 200 && resp.statusText == 'OK' && resp.data['status'] == 'ok') {
-          this.getSitesTableList(true);
-          this.$message.success("Update version successfully. Spent time:" + resp.data['spent_time']);
-        }
-        else {
-          this.$message.success("Update version failed");
-        }
+      let alertMessage = "Are you sure to sync all operator tags? it would take more than 30s";
+      this.$confirm(alertMessage, "Sync tags")
+          .then(() => {
+            this.tableLoading = true;
+            axios.get(g_server_update_version_url).then(resp => {
+              if (resp.status == 200 && resp.statusText == 'OK' && resp.data['status'] == 'ok') {
+                this.getSitesTableList(true);
+                this.$message.success("Sync all operators' tags successfully. Spent time:" + resp.data['spent_time'] + "s");
+              }
+              else {
+                this.$message.success("Sync tags failed");
+              }
 
-        this.tableLoading = false;
-      });
+              this.tableLoading = false;
+            });
+          })
+          .catch(() => {
+            this.$message.error("Sync all tags cancelled");
+          })
     },
     onDialogConfirm() {
       this.dialogVisible = false;
