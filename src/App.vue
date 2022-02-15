@@ -103,19 +103,25 @@
       <el-table-column fixed="right" label="Operation" align="center" width="250">
         <template slot-scope="{ row }">
           <el-row>
-            <el-col :span=9><div style="word-spacing:10px">{{"\xa0\xa0"}}</div></el-col>
-            <el-col :span=6>
-              <el-col :span=12>
+            <el-col :span=7><div style="word-spacing:10px">{{"\xa0\xa0"}}</div></el-col>
+            <el-col :span=10>
+              <el-col :span=7>
                 <img class="opt-icon" src="@/edit_icon.png" @click="handleEdit(row)" />
               </el-col>
-              <el-col :span=1>
+              <el-col :span=2>
                 <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
               </el-col>
-              <el-col :span=11>
+              <el-col :span=6>
+                <img class="opt-icon" src="@/refresh.jpeg" @click="handleUpdateTag(row)" />
+              </el-col>
+              <el-col :span=2>
+                <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
+              </el-col>
+              <el-col :span=7>
                 <img class="opt-icon" src="@/delete_icon.png" @click="handleDelete(row)" />
               </el-col>
             </el-col>
-            <el-col :span=9></el-col>
+            <el-col :span=7></el-col>
           </el-row>
         </template>
       </el-table-column>
@@ -312,7 +318,12 @@
 <script>
 
 import axios from "axios";
-import {g_server_site_url, g_server_sites_url, g_server_update_version_url} from "@/config";
+import {
+  g_server_site_url,
+  g_server_sites_url,
+  g_server_update_site_tag_url,
+  g_server_update_version_url
+} from "@/config";
 
 
 const formQuery = {
@@ -484,6 +495,19 @@ export default {
           .catch(() => {
             this.$message.error("Canceled");
           })
+    },
+    handleUpdateTag(row) {
+      this.tableLoading = true;
+      axios.put(g_server_update_site_tag_url+row['key']).then(resp => {
+        if (resp.status == 200 && resp.statusText == 'OK' && resp.data['status'] == 'ok') {
+          this.getSitesTableList(true);
+          this.$message.success("Update site tag successfully. spent time:" + resp.data['spent_time']);
+        }
+        else {
+          this.$message.error("Update site tag failed. error message:" + resp.data['errorMessage']);
+        }
+        this.tableLoading = false;
+      });
     },
     handleUpdateVersion() {
       this.tableLoading = true;
