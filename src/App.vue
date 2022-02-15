@@ -69,14 +69,22 @@
     <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
 
     <el-row>
-      <el-col :span=19>
+      <el-col :span=8>
         <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
       </el-col>
-      <el-col :span=3>
-        <el-button @click="handleUpdateVersion">Update tag</el-button>
+      <el-col :span=11>
+        <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
       </el-col>
-      <el-col :span=2>
-        <el-button @click="handleNew">New</el-button>
+      <el-col :span=5>
+        <el-col :span=8>
+          <el-button @click="handleNew">New a site</el-button>
+        </el-col>
+        <el-col :span=7>
+          <el-button @click="reload">Reload</el-button>
+        </el-col>
+        <el-col :span=9>
+          <el-button @click="handleUpdateVersion">Sync tags</el-button>
+        </el-col>
       </el-col>
     </el-row>
 
@@ -462,6 +470,9 @@ export default {
     },
     handleQuery() {
       this.getSitesTableList(false);
+    },
+    reload() {
+      this.getSitesTableList(true);
     },
     handleReset() {
       this.queryOperatorName = ''
