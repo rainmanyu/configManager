@@ -1,8 +1,6 @@
 <template>
-  <div class="page-container" v-loading="tableLoading">
-    
+  <div class="page-container" v-loading="tableLoading" element-loading-text="Loading...">
     <div class="tableLine"><span class="midText"></span></div>
-
     <el-form ref="queryForm" label-position="right" label-width="6em" size="medium" style=“width:500px>
       <el-row>
         <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
@@ -69,30 +67,46 @@
     <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
 
     <el-row>
+      <el-col :span=9>
+        <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
+      </el-col>
       <el-col :span=8>
         <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
       </el-col>
-      <el-col :span=11>
-        <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
-      </el-col>
-      <el-col :span=5>
-        <el-col :span=8>
+      <el-col :span=7>
+        <el-col :span=4>
           <el-button @click="handleNew">New a site</el-button>
         </el-col>
-        <el-col :span=7>
+        <el-col :span=2>
+          <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
+        </el-col>
+		<el-col :span=4>
           <el-button @click="reload">Reload</el-button>
         </el-col>
-        <el-col :span=9>
+        <el-col :span=2>
+          <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
+        </el-col>
+        <el-col :span=4>
           <el-button @click="handleUpdateVersion">Sync tags</el-button>
         </el-col>
+        <el-col :span=2>
+          <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
+        </el-col>
+		<el-col :span=6>
+			<el-button @click="showImportDlg">Import Excel</el-button>
+		</el-col>
       </el-col>
     </el-row>
-
+	<el-row>
+		<el-col :span=24>
+			<div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
+		</el-col>
+	</el-row>
     <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
     <div class="tableLine"><span class="midText"></span></div>
     <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
 
-    <el-table ref="table" v-loading="tableLoading" :data="tableList" header-row-class-name="table-header"
+    <el-table ref="table" :data="tableList" header-row-class-name="table-header"
               :row-class-name="tableRowClassName"
               @selection-change="handleSelectionChange">
 
@@ -321,6 +335,17 @@
         </el-row>
       </el-form>
     </el-dialog>
+	
+	<el-dialog class="pi-dialog" width="600px" :visible.sync="uploadDialogVisible" title="Upload" >
+		<el-row>
+			<el-col :span=16>
+				<input id="fileinput" @change="uploading($event)" type="file" accept="*">
+			</el-col>
+			<el-col :span=8>				
+				<el-button @click="submit($event)">Submit</el-button>
+			</el-col>
+		</el-row>
+	</el-dialog>
   </div>
 </template>
 <script>
@@ -330,7 +355,8 @@ import {
   g_server_site_url,
   g_server_sites_url,
   g_server_update_site_tag_url,
-  g_server_update_version_url
+  g_server_update_version_url,
+  g_server_upload_url
 } from "@/config";
 
 
@@ -431,8 +457,9 @@ export default {
       }, {
         value: 'production',
         label: 'production'
-      }]
-
+      }],
+		file:'',
+		src:''
     }
   },
 
@@ -541,6 +568,8 @@ export default {
             this.$message.error("Sync all tags cancelled");
           })
     },
+	showImportDlg() {
+	},
     onDialogConfirm() {
       this.dialogVisible = false;
       this.$refs["dialogForm"].validate((valid) => {
@@ -725,8 +754,28 @@ export default {
       }
 
       this.tableList =  rtnTableList4;
-    }
-  },
+    },
+	uploading(event){
+		this.file = event.target.files[0];
+		var windowURL = window.URL || window.webkitURL;
+		this.file = event.target.files[0];
+		this.src = windowURL.createObjectURL(event.target.files[0]);
+	},
+	submit(){
+		event.preventDefault();
+		let formdata = new FormData();
+		formdata.append('file',this.file);
+		let config = {
+			headers: {
+				'Content-Type': 'multipart/form-data'
+			}
+		};
+		axios.post(g_server_upload_url, formdata, config).then(resp => {
+			console.log(resp.status);
+			console.log(resp.data);
+		});
+	},
+  }
 };
 </script>
 
