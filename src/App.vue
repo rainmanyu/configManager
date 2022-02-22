@@ -106,9 +106,7 @@
     <div class="tableLine"><span class="midText"></span></div>
     <div style="word-spacing:10px">{{"\xa0\xa0"}}</div>
 
-    <el-table ref="table" :data="tableList" header-row-class-name="table-header"
-              :row-class-name="tableRowClassName"
-              @selection-change="handleSelectionChange">
+    <el-table ref="table" :data="tableList">
 
       <el-table-column label="Operator" align="center" prop="operatorName" width="200" />
       <el-table-column label="domainId" align="center" prop="domainId" width="80"/>
@@ -414,7 +412,6 @@ export default {
 		importDialogVisible: false,
       originalTableList: [],
       openDialogType: "", //edit duplicate
-      selectionIds: [],
       tableList: [],
       fullTableList: [],
       formQuery: Object.assign({}, formQuery),
@@ -678,25 +675,9 @@ export default {
     closeDialogBeforeCallback() {
       this.avatarUrl = "";
     },
-
-    handleSelectionChange(e) {
-      this.selectionIds = e.map((item) => {
-        return item.id;
-      });
-    },
  
     onUploadAvatarSuccess(res) {
       this.avatarUrl = res.data;
-    },
-
-    tableRowClassName({row, rowIndex}) {
-      if (row.domainId != row.key) {
-        console.log(row.domainId + '-' + row.key + '-' + rowIndex + '-not_equal');
-        return 'info-row';
-      } else  {
-        console.log(row.domainId + '-' + row.key + '-' + rowIndex + '-equal');
-        return '';
-      }
     },
 
     filterData(){
