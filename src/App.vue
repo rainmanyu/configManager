@@ -336,7 +336,7 @@
       </el-form>
     </el-dialog>
 	
-	<el-dialog class="pi-dialog" width="600px" :visible.sync="uploadDialogVisible" title="Upload" >
+	<el-dialog class="pi-dialog" width="600px" :visible.sync="importDialogVisible" title="Upload" v-loading="importDlgLoading">
 		<el-row>
 			<el-col :span=16>
 				<input id="fileinput" @change="uploading($event)" type="file" accept="*">
@@ -408,8 +408,10 @@ export default {
     return {
       tableQuery: {}, //表格搜索接口参数
       tableLoading: false,
+		importDlgLoading: false,
       dialogVisible: false,
       newDialogVisible: false,
+		importDialogVisible: false,
       originalTableList: [],
       openDialogType: "", //edit duplicate
       selectionIds: [],
@@ -430,7 +432,10 @@ export default {
       }, {
         value: 'EM_FE',
         label: 'EM_FE'
-      }],
+      }, {
+		value: 'UNKNOWN',
+		label: 'UNKNOWN'
+	}],
       query_frontend_options: [{
         value: 'ALL',
         label: 'ALL'
@@ -440,23 +445,26 @@ export default {
       }, {
         value: 'EM_FE',
         label: 'EM_FE'
+      }, {
+        value: 'UNKNOWN',
+        label: 'UNKNOWN'
       }],
       environment_options: [{
-        value: 'stage',
-        label: 'stage'
+        value: 'Stage',
+        label: 'Stage'
       }, {
-        value: 'production',
-        label: 'production'
+        value: 'Production',
+        label: 'Production'
       }],
       query_environment_options: [{
         value: 'ALL',
         label: 'ALL'
       }, {
-        value: 'stage',
-        label: 'stage'
+        value: 'Stage',
+        label: 'Stage'
       }, {
-        value: 'production',
-        label: 'production'
+        value: 'Production',
+        label: 'Production'
       }],
 		file:'',
 		src:''
@@ -569,6 +577,8 @@ export default {
           })
     },
 	showImportDlg() {
+		this.importDialogVisible = true;
+		console.log(this.importDialogVisible);
 	},
     onDialogConfirm() {
       this.dialogVisible = false;
@@ -770,9 +780,11 @@ export default {
 				'Content-Type': 'multipart/form-data'
 			}
 		};
+		this.importDlgLoading = true;
 		axios.post(g_server_upload_url, formdata, config).then(resp => {
 			console.log(resp.status);
 			console.log(resp.data);
+			this.importDlgLoading = false;
 		});
 	},
   }
