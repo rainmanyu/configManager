@@ -404,7 +404,7 @@ function isMatch(regex, content) {
 export default {
   data() {
     return {
-      tableQuery: {}, //表格搜索接口参数
+      tableQuery: {}, 
       tableLoading: false,
 		importDlgLoading: false,
       dialogVisible: false,
@@ -424,8 +424,8 @@ export default {
       queryENV : "ALL",
       queryFrontend : "ALL",
       frontend_options: [{
-        value: 'NONE_EM_FE',
-        label: 'NONE_EM_FE'
+        value: 'EXTERNAL_FE',
+        label: 'EXTERNAL_FE'
       }, {
         value: 'EM_FE',
         label: 'EM_FE'
@@ -437,8 +437,8 @@ export default {
         value: 'ALL',
         label: 'ALL'
       },{
-        value: 'NONE_EM_FE',
-        label: 'NONE_EM_FE'
+        value: 'EXTERNAL_FE',
+        label: 'EXTERNAL_FE'
       }, {
         value: 'EM_FE',
         label: 'EM_FE'
@@ -763,9 +763,16 @@ export default {
 		};
 		this.importDlgLoading = true;
 		axios.post(g_server_upload_url, formdata, config).then(resp => {
-			console.log(resp.status);
-			console.log(resp.data);
-			this.importDlgLoading = false;
+			if (resp.status == 200 && resp.statusText == 'OK' && resp.data['status'] == 'ok' && resp.data['flag'] == true) {
+				this.importDlgLoading = false;
+				this.getSitesTableList(true);
+				this.importDialogVisible = false;
+				console.log(this.importDialogVisible);
+				this.$message.success("Import sites from excel successfully");
+			}
+			else {
+				this.$message.error("Import failed");
+			}			
 		});
 	},
   }
